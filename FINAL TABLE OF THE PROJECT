@@ -1,7 +1,4 @@
 
-
-
-
 -- Create StudentHealthOutcomes Table
 CREATE TABLE StudentHealthOutcomes (
     HealthRecordID INT PRIMARY KEY,
