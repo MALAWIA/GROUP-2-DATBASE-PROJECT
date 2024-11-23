@@ -1,0 +1,25 @@
+
+
+
+
+-- Create StudentHealthOutcomes Table
+CREATE TABLE StudentHealthOutcomes (
+    HealthRecordID INT PRIMARY KEY,
+    SchoolID INT,
+    Date DATE,
+    HealthMetrics VARCHAR(255),
+    FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
+);
+
+-- Select Data from StudentHealthOutcomes Table
+SELECT * FROM StudentHealthOutcomes;
+
+-- Insert Data into StudentHealthOutcomes Table
+INSERT INTO StudentHealthOutcomes (HealthRecordID, SchoolID, Date, HealthMetrics) VALUES
+(123567, 1, '2024-07-01', 'Healthy'),
+(478534, 2, '2024-07-04', 'Healthy'),
+(789435, 3, '2024-07-08', 'Fair'),
+(904732, 4, '2024-07-10', 'Poor');
+
+-- Select Data from StudentHealthOutcomes Table
+SELECT * FROM StudentHealthOutcomes;
