@@ -87,3 +87,93 @@ INSERT INTO StudentHealthOutcomes (HealthRecordID, SchoolID, Date, HealthMetrics
 
 -- Select Data from StudentHealthOutcomes Table
 SELECT * FROM StudentHealthOutcomes;
+
+-- Insert Data into StudentHealthOutcomes Table
+INSERT INTO StudentHealthOutcomes (HealthRecordID, SchoolID, Date, HealthMetrics) VALUES
+(123567, 1, '2024-07-01', 'Healthy'),
+(478534, 2, '2024-07-04', 'Healthy'),
+(789435, 3, '2024-07-08', 'Fair'),
+(904732, 4, '2024-07-10', 'Poor');
+
+-- Select Data from StudentHealthOutcomes Table
+SELECT * FROM StudentHealthOutcomes;
+
+--to retrieve all schools with their corresponding waterpoint 
+SELECT s.SchoolName, wp.WaterPointID, wp.InstallationDate, wp.WaterQuality, wp.FunctioningStatus
+FROM Schools s
+JOIN WaterPoints wp ON s.SchoolID = wp.SchoolID;
+
+--to get the count for operational water points for each school
+SELECT s.SchoolName, COUNT(wp.WaterPointID) AS OperationalWaterPoints
+FROM Schools s
+JOIN WaterPoints wp ON s.SchoolID = wp.SchoolID
+WHERE wp.FunctioningStatus = 'OPERATIONAL'
+GROUP BY s.SchoolName;
+
+--to find schools with poor water quality 
+SELECT s.SchoolName, wp.WaterPointID, wp.WaterQuality
+FROM Schools s
+JOIN WaterPoints wp ON s.SchoolID = wp.SchoolID
+WHERE wp.WaterQuality = 'POOR';
+
+--to retriev maintenance records for water points installed after a specific date
+SELECT wp.WaterPointID, m.MaintenanceID, m.MaintenanceDate, m.NextMaintenanceDate
+FROM WaterPoints wp
+JOIN Maintenance m ON wp.WaterPointID = m.WaterPointID
+WHERE wp.InstallationDate > '2024-01-01';
+
+
+--to get the average health metrics for each school
+SELECT s.SchoolName, AVG(CASE sho.HealthMetrics WHEN 'Healthy' THEN 1 WHEN 'Fair' THEN 0.5 WHEN 'Poor' THEN 0 END) AS AverageHealthMetrics
+FROM Schools s
+JOIN StudentHealthOutcomes sho ON s.SchoolID = sho.SchoolID
+GROUP BY s.SchoolName;
+
+--to find schools with atleast one non-operational water point
+SELECT s.SchoolName
+FROM Schools s
+JOIN WaterPoints wp ON s.SchoolID = wp.SchoolID
+WHERE wp.FunctioningStatus = 'NOT OPERATIONAL'
+GROUP BY s.SchoolName
+HAVING COUNT(wp.WaterPointID) >= 1;
+
+--to retrieve the next maintenance date for each water point 
+SELECT wp.WaterPointID, m.NextMaintenanceDate
+FROM WaterPoints wp
+JOIN Maintenance m ON wp.WaterPointID = m.WaterPointID
+ORDER BY m.NextMaintenanceDate ASC;
+
+
+
+-- 1. Retrieve all schools with their corresponding water points
+SELECT s.SchoolName, wp.WaterPointID, wp.WaterQuality, wp.FunctioningStatus
+FROM Schools s
+INNER JOIN WaterPoints wp ON s.SchoolID = wp.SchoolID;
+
+-- 2. Get maintenance records for operational water points
+SELECT wp.WaterPointID, m.MaintenanceID, m.MaintenanceDate, m.NextMaintenanceDate
+FROM WaterPoints wp
+INNER JOIN Maintenance m ON wp.WaterPointID = m.WaterPointID
+WHERE wp.FunctioningStatus = 'OPERATIONAL';
+
+
+
+-- 3. Retrieve all schools and their water points, including schools without water points
+SELECT s.SchoolName, wp.WaterPointID, wp.WaterQuality
+FROM Schools s
+LEFT OUTER JOIN WaterPoints wp ON s.SchoolID = wp.SchoolID;
+
+-- 4. Retrieve all water points and their maintenance records, including water points without maintenance records
+SELECT wp.WaterPointID, m.MaintenanceID, m.MaintenanceDate, m.NextMaintenanceDate
+FROM WaterPoints wp
+LEFT OUTER JOIN Maintenance m ON wp.WaterPointID = m.WaterPointID;
+
+-- 5. Retrieve all health outcomes for students, including schools without health records
+SELECT s.SchoolName, sho.HealthRecordID, sho.Date, sho.HealthMetrics
+FROM Schools s
+LEFT OUTER JOIN StudentHealthOutcomes sho ON s.SchoolID = sho.SchoolID;
+
+-- 6. Retrieve water points that have maintenance records, including those without
+SELECT wp.WaterPointID, m.MaintenanceID, m.MaintenanceDate, m.NextMaintenanceDate
+FROM Maintenance m
+RIGHT OUTER JOIN WaterPoints wp ON m.WaterPointID = wp.WaterPointID;
