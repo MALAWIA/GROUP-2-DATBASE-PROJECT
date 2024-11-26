@@ -1,0 +1,89 @@
+CREATE TABLE Schools (
+    SchoolID INT PRIMARY KEY,
+    SchoolName VARCHAR(255),
+    Location VARCHAR(255),
+    ContactInfo VARCHAR(255)
+);
+
+-- Insert Data into Schools Table
+INSERT INTO Schools (SchoolID, SchoolName, Location, ContactInfo) VALUES
+(1, 'Green Valley High School', 'Green Valley, CA', 'contact@greenvalleyhs.edu'),
+(2, 'Riverdale Academy', 'Riverdale, NY', 'info@riverdaleacademy.org'),
+(3, 'Sunnydale School', 'Sunnydale, FL', 'hello@sunnydaleschool.com'),
+(4, 'Maple Leaf International School', 'Toronto, ON', 'info@mapleleafschool.ca'),
+(5, 'Crescent Moon High', 'Phoenix, AZ', 'support@crescentmoonhigh.edu'),
+(6, 'Oceanview Middle School', 'San Diego, CA', 'contact@oceanviewms.edu'),
+(7, 'Hilltop Academy', 'Seattle, WA', 'info@hilltopacademy.org'),
+(8, 'Pine Ridge School', 'Denver, CO', 'contact@pineridgeschool.com'),
+(9, 'Star Academy', 'Miami, FL', 'info@staracademy.edu'),
+(10, 'Lakeside High School', 'Chicago, IL', 'contact@lakesidehs.edu');
+
+-- Select Data from Schools Table
+SELECT * FROM Schools;
+
+-- Create WaterPoints Table
+CREATE TABLE WaterPoints (
+    WaterPointID VARCHAR(250) PRIMARY KEY,
+    SchoolID INT,
+    InstallationDate DATE,
+    WaterQuality VARCHAR(250),
+    FunctioningStatus VARCHAR(250),
+    CONSTRAINT FK_School FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
+);
+
+-- Insert Data into WaterPoints Table
+INSERT INTO WaterPoints (WaterPointID, SchoolID, InstallationDate, WaterQuality, FunctioningStatus) VALUES
+('WOO1', 1, '2024-01-10', 'GOOD', 'OPERATIONAL'),
+('WOO2', 2, '2024-01-10', 'EXCELLENT', 'OPERATIONAL'),
+('WOO3', 3, '2024-01-10', 'FAIR', 'NOT OPERATIONAL'),
+('WOO4', 4, '2024-01-10', 'POOR', 'NOT OPERATIONAL'),
+('WOO5', 5, '2024-01-10', 'POOR', 'NOT OPERATIONAL'),
+('WOO6', 6, '2024-01-10', 'FAIR', 'NOT OPERATIONAL'),
+('WOO7', 7, '2024-01-10', 'GOOD', 'OPERATIONAL'),
+('WOO8', 8, '2024-01-10', 'EXCELLENT', 'OPERATIONAL'),
+('WOO9', 9, '2024-01-10', 'EXCELLENT', 'OPERATIONAL'),
+('WOO10', 10, '2024-01-10', 'GOOD', 'OPERATIONAL');
+
+-- Select Data from WaterPoints Table
+SELECT * FROM WaterPoints;
+
+-- Create Maintenance Table
+CREATE TABLE Maintenance (
+    MaintenanceID INT PRIMARY KEY,
+    WaterPointID VARCHAR(250),
+    MaintenanceDate DATE,
+    NextMaintenanceDate DATE,
+    CONSTRAINT FK_WaterPoint FOREIGN KEY (WaterPointID) REFERENCES WaterPoints(WaterPointID)
+);
+
+-- Insert Data into Maintenance Table
+INSERT INTO Maintenance (MaintenanceID, WaterPointID, MaintenanceDate, NextMaintenanceDate) VALUES
+(123567, 'WOO1', '2024-07-01', '2024-07-30'),
+(478534, 'WOO2', '2024-07-04', '2024-08-02'),
+(789435, 'WOO3', '2024-07-08', '2024-08-07'),
+(904732, 'WOO4', '2024-07-10', '2024-08-20');
+
+-- Select Data from Maintenance Table
+SELECT * FROM Maintenance;
+
+-- Create StudentHealthOutcomes Table
+CREATE TABLE StudentHealthOutcomes (
+    HealthRecordID INT PRIMARY KEY,
+    SchoolID INT,
+    Date DATE,
+    HealthMetrics VARCHAR(255),
+    FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
+);
+
+-- Select Data from StudentHealthOutcomes Table
+SELECT * FROM StudentHealthOutcomes;
+
+-- Insert Data into StudentHealthOutcomes Table
+INSERT INTO StudentHealthOutcomes (HealthRecordID, SchoolID, Date, HealthMetrics) VALUES
+(123567, 1, '2024-07-01', 'Healthy'),
+(478534, 2, '2024-07-04', 'Healthy'),
+(789435, 3, '2024-07-08', 'Fair'),
+(904732, 4, '2024-07-10', 'Poor');
+
+-- Select Data from StudentHealthOutcomes Table
+SELECT * FROM StudentHealthOutcomes;
